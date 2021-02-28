@@ -7,11 +7,11 @@ import styled from 'styled-components'
 import TextEditor from './components/TextEditor'
 
 const StyledNavLink = styled(Link)`
-  color: #ffffff;
+  color: #363636;
   /* background: #256ce1; */
   border-radius: 4px;
   text-decoration: none;
-  /* padding: 1rem 2rem; */
+  padding: 5px 5px;
   margin: 1rem 1rem;
   outline: none;
   /* :hover {
@@ -21,15 +21,15 @@ const StyledNavLink = styled(Link)`
   :hover {
     transition: all 0.2s ease-in-out;
     /* background: #fff; */
-    background: #0c78d1;
+    background: #f3f3f3;
     /* color: #010606; */
-    color: #ffffff;
+    /* color: #ffffff; */
   }
 `
 const NavMenu = styled.div`
   display: flex;
   align-items: center;
-  height: 40px;
+  height: 59px;
   
 `
 const UlList = styled.ul`
@@ -39,7 +39,8 @@ const UlList = styled.ul`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  background-color: #0d92ff;
+  background-color: white;
+  /* background-color: #0d92ff; */
 `
 
 
@@ -52,6 +53,9 @@ const App = () => {
               <li>
                 <StyledNavLink to="/">Coding Platform</StyledNavLink>
               </li>
+            </NavMenu>
+            <NavMenu>
+              
             </NavMenu>
             <NavMenu>
               <li>
