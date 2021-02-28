@@ -38,10 +38,27 @@ const UlList = styled.ul`
   padding: 0;
   display: flex;
   flex-direction: row;
+  align-items: center;
   justify-content: space-between;
   background-color: white;
   /* background-color: #0d92ff; */
 `
+const RunCommand = styled.input`
+
+`
+const RunCommandInput = styled.input`
+  /* border: none; */
+  /* max-width: 600px;
+  min-width: 200px; */
+  height:40px;
+  flex-grow: 1;
+  text-indent: 10px;
+  font-size: 16px;
+  outline: 0 none;
+  /* border: 0 none; */
+  border-radius: 10px;
+`
+
 
 
 const App = () => {
@@ -54,9 +71,7 @@ const App = () => {
                 <StyledNavLink to="/">Coding Platform</StyledNavLink>
               </li>
             </NavMenu>
-            <NavMenu>
-              
-            </NavMenu>
+            <RunCommandInput placeholder="Run commands"></RunCommandInput>
             <NavMenu>
               <li>
                 <StyledNavLink to="/">Home</StyledNavLink>
