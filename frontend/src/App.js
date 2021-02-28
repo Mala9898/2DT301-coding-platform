@@ -4,6 +4,8 @@ import './App.css';
 import {BrowserRouter as Router, Switch, Route, Link} from "react-router-dom"
 import styled from 'styled-components'
 
+import TextEditor from './components/TextEditor'
+
 const StyledNavLink = styled(Link)`
   color: #ffffff;
   /* background: #256ce1; */
@@ -65,7 +67,7 @@ const App = () => {
           </UlList>
         </nav>
       <div className="App">
-        <p>Hello world</p>
+        <p>Welcome to Coding Platform</p>
 
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
@@ -87,6 +89,12 @@ const App = () => {
 }
 const About = () => <p>About</p>
 const Users = () => <p>Users</p>
-const Home = () => <p>Home</p>
+const Home = () => (
+  <>
+    <p>hell</p>
+    <TextEditor/>
+    <p>end</p>
+  </>
+  )
 
 export default App;
