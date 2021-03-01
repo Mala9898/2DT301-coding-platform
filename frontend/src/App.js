@@ -6,6 +6,8 @@ import styled from 'styled-components'
 
 import TextEditor from './components/TextEditor'
 
+const lightGray = "#f3f3f3";
+
 const StyledNavLink = styled(Link)`
   color: #363636;
   /* background: #256ce1; */
@@ -55,8 +57,9 @@ const RunCommandInput = styled.input`
   text-indent: 10px;
   font-size: 16px;
   outline: 0 none;
-  /* border: 0 none; */
-  border-radius: 10px;
+  border: 0 none;
+  border-radius: 6px;
+  background: ${lightGray};
 `
 
 
@@ -82,11 +85,14 @@ const App = () => {
               <li>
                 <StyledNavLink to="/users">Users</StyledNavLink>
               </li>
+              <li>
+                <StyledNavLink to="/project">Project</StyledNavLink>
+              </li>
             </NavMenu>
           </UlList>
         </nav>
       <div className="App">
-        <p>Welcome to Coding Platform</p>
+        {/* <p>Welcome to Coding Platform</p> */}
 
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
@@ -96,6 +102,9 @@ const App = () => {
           </Route>
           <Route path="/users">
             <Users />
+          </Route>
+          <Route path="/project">
+            <Project />
           </Route>
           <Route path="/">
             <Home />
@@ -115,5 +124,58 @@ const Home = () => (
     <p>end</p>
   </>
   )
+
+const C1 = styled.div`
+  display: grid; // glock level grid
+  grid-template-columns: 200px 1fr 1fr;
+  column-gap: 2px;
+  /* background-color: red; */
+  width: auto;
+  height: 400px;
+  padding: 10px;
+`
+const ProjectFiles = styled.div`
+  width: 100%;
+  height: 100px;
+  background-color: white;
+  /* border: 1px solid black; */
+  /* border-radius: 5px; */
+  /* margin: 5px; */
+  /* display: block; */
+`
+const ProjectCodeEditorView = styled.div`
+  width: 100%;
+  height: 100px;
+  background-color: white;
+  /* border: 1px solid black; */
+  /* margin: 5px; */
+  /* display: block; */
+`
+const ProjectConsole = styled.div`
+  width: 100%;
+  height: 100px;
+  background-color: white;
+  /* border: 1px solid black; */
+  /* margin: 5px; */
+  /* display: block; */
+`
+const Project = () => {
+
+  const meme = "meme"
+
+  return (
+    <>
+      <h1>Project {meme}</h1>
+      {/* <E1></E1> */}
+      <C1>
+        <ProjectFiles></ProjectFiles>
+        <ProjectCodeEditorView></ProjectCodeEditorView>
+        <ProjectConsole></ProjectConsole>
+      </C1>
+      <h2>End</h2>
+    </>
+    )
+} 
+
 
 export default App;
