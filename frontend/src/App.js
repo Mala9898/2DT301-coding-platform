@@ -187,16 +187,45 @@ const ProjectConsole = styled.div`
   /* margin: 5px; */
   /* display: block; */
 `
+const CodeEditorStyled = styled.textarea`
+  border: 0px;
+  resize: none;
+  /* wrap: off; */
+`
+const CodeEditor = () => {
+
+
+  return (
+    <>
+      <textarea>
+
+      </textarea>
+    </>
+  )
+}
 const Project = () => {
 
   const meme = "meme"
+  const onKeyDownHandler = (e) => {
+    if(e.key == 'Tab' && !e.shiftKey) {
+      document.execCommand('insertText', false, "    ");
+      e.preventDefault();
+      return false;
+    }
+  }
 
   return (
      <C1>
        {/* <C2> */}
-       <ProjectFiles></ProjectFiles>
-        <ProjectCodeEditorView></ProjectCodeEditorView>
-        <ProjectConsole></ProjectConsole>
+        <ProjectFiles>
+
+        </ProjectFiles>
+        <ProjectCodeEditorView>
+          <CodeEditorStyled wrap="off" onKeyDown={onKeyDownHandler}></CodeEditorStyled>
+        </ProjectCodeEditorView>
+        <ProjectConsole>
+
+        </ProjectConsole>
        {/* </C2> */}
         
         {/* <> */}

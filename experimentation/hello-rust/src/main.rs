@@ -1,5 +1,8 @@
 fn main() {
     // let x : i32 = 1000;
+    use std::any::type_name;
+    println!("{}", type_name::<i32>());
+
     println!("{}","123".len());
     println!("{}",dice());
 
