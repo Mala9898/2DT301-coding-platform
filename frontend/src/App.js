@@ -1,10 +1,11 @@
 import logo from './logo.svg';
 import './App.css';
-
+import React, { useState, useEffect } from 'react'
 import {BrowserRouter as Router, Switch, Route, Link} from "react-router-dom"
 import styled from 'styled-components'
 
 import TextEditor from './components/TextEditor'
+import { useSlate } from 'slate-react';
 
 const lightGray = "#f3f3f3";
 
@@ -158,17 +159,45 @@ const C1 = styled.div`
   /* margin: 10px; */
   /* gap: 10px 10px; */
 `
-const ProjectFiles = styled.div`
-  display:grid;
-  /* grid-column: 1 / 1;  */
-  /* width: 100%; */
-  height: 100%;
-  background-color: white;
-  /* border: 1px solid black; */
-  /* border-radius: 5px; */
-  /* margin: 5px; */
-  /* display: block; */
+const ProjectFilesStyle = styled.div`
+display:grid;
+/* grid-column: 1 / 1;  */
+/* width: 100%; */
+height: 100%;
+background-color: white;
+/* border: 1px solid black; */
+/* border-radius: 5px; */
+/* margin: 5px; */
+/* display: block; */
 `
+const tempFiles = [
+  {file_id: 1, filename: "test.py"},
+  {file_id: 2, filename: "test_2.py"},
+  {file_id: 3, filename: "shrek.png"},
+]
+const ULFileListStyle = styled.ul`
+  list-style: none;
+  text-align: left;
+  /* color: red; */
+  padding-left: 0px;
+  margin: 2px 10px;
+`
+const ProjectFiles = () => {
+  const [files, setFiles] = useState(tempFiles)
+  useEffect(() => {
+    // TODO read from server
+  }, [])
+  return (
+    <ProjectFilesStyle>
+      <ULFileListStyle>
+        {files.map( file => 
+          <li key={file.file_id} onClick={() => {alert("you pressed: "+file.filename)}}>{file.filename}</li>  
+        )}
+      </ULFileListStyle>
+    </ProjectFilesStyle>
+  )
+}
+
 const ProjectCodeEditorView = styled.div`
   display:grid;
   /* width: 100%; */
@@ -178,7 +207,22 @@ const ProjectCodeEditorView = styled.div`
   /* margin: 5px; */
   /* display: block; */
 `
-const ProjectConsole = styled.div`
+
+const ProjectShell = () => {
+  const onKeyDownHandler = (e) => {
+    if(e.key == 'Tab' && !e.shiftKey) {
+      document.execCommand('insertText', false, "    ");
+      e.preventDefault();
+      return false;
+    }
+  }
+  return (
+    <ProjectShellStyle>
+      <CodeEditorStyled wrap="off" onKeyDown={onKeyDownHandler}></CodeEditorStyled>
+    </ProjectShellStyle>
+  )
+}
+const ProjectShellStyle = styled.div`
   display:grid;
   /* width: 100%; */
   height: 100%;
@@ -190,8 +234,11 @@ const ProjectConsole = styled.div`
 const CodeEditorStyled = styled.textarea`
   border: 0px;
   resize: none;
+  box-shadow: none;
+  outline: none;
   /* wrap: off; */
 `
+
 const CodeEditor = () => {
 
 
@@ -203,9 +250,9 @@ const CodeEditor = () => {
     </>
   )
 }
+
 const Project = () => {
 
-  const meme = "meme"
   const onKeyDownHandler = (e) => {
     if(e.key == 'Tab' && !e.shiftKey) {
       document.execCommand('insertText', false, "    ");
@@ -213,9 +260,11 @@ const Project = () => {
       return false;
     }
   }
+  
 
   return (
-     <C1>
+    <>
+    <C1>
        {/* <C2> */}
         <ProjectFiles>
 
@@ -223,9 +272,11 @@ const Project = () => {
         <ProjectCodeEditorView>
           <CodeEditorStyled wrap="off" onKeyDown={onKeyDownHandler}></CodeEditorStyled>
         </ProjectCodeEditorView>
-        <ProjectConsole>
+        <ProjectShell
+      >
 
-        </ProjectConsole>
+        </ProjectShell
+      >
        {/* </C2> */}
         
         {/* <> */}
@@ -235,6 +286,8 @@ const Project = () => {
       {/* <h2>End</h2> */}
     {/* </> */}
       </C1>
+    </>
+     
     
     )
 } 
