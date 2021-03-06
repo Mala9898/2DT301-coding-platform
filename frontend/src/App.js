@@ -210,11 +210,22 @@ const ProjectCodeEditorView = styled.div`
 
 const ProjectShell = () => {
   const onKeyDownHandler = (e) => {
-    if(e.key == 'Tab' && !e.shiftKey) {
-      document.execCommand('insertText', false, "    ");
-      e.preventDefault();
-      return false;
+    switch (e.key) {
+      case 'Tab':
+        console.log("tab")
+        e.preventDefault();
+        break;
+      case 'Enter':
+        console.log("enter")
+      default:
+        break;
     }
+    // if(e.key == 'Tab') {
+    //   // document.execCommand('insertText', false, "    ");
+    //   e.preventDefault();
+    //   console.log("tab")
+    //   return false;
+    // }
   }
   return (
     <ProjectShellStyle>
