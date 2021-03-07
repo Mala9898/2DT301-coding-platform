@@ -1,11 +1,20 @@
 import logo from './logo.svg';
 import './App.css';
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import {BrowserRouter as Router, Switch, Route, Link} from "react-router-dom"
 import styled from 'styled-components'
 
-import TextEditor from './components/TextEditor'
-import { useSlate } from 'slate-react';
+// import {socket} from "../src/service/socket"
+// import socketIOClient from "socket.io-client"
+// import io from 'socket.io-client'
+// const SOCKET_SERVER_URL = "http://localhost:5000";
+import { initiateSocket, disconnectSocket,
+  subscribeToChat, sendMessage } from './service/socket';
+
+
+
+// import TextEditor from './components/TextEditor'
+// import { useSlate } from 'slate-react';
 
 const lightGray = "#f3f3f3";
 
@@ -132,7 +141,7 @@ const Users = () => <p>Users</p>
 const Home = () => (
   <>
     <p>hell</p>
-    <TextEditor/>
+    {/* <TextEditor/> */}
     <p>end</p>
   </>
   )
@@ -209,6 +218,24 @@ const ProjectCodeEditorView = styled.div`
 `
 
 const ProjectShell = () => {
+  // let ss = io(SOCKET_SERVER_URL)
+
+  const [response, setResponse] = useState("")
+
+  useEffect(() => {
+    initiateSocket(111)
+
+
+
+    // ss.on("my response", data => {
+    //   setResponse(data)
+    //   console.log("From API: " + data)
+    // })
+
+    return () => {
+      disconnectSocket();
+    }
+  }, [])
   const onKeyDownHandler = (e) => {
     switch (e.key) {
       case 'Tab':
@@ -229,6 +256,9 @@ const ProjectShell = () => {
   }
   return (
     <ProjectShellStyle>
+      <p>
+        response: {response}
+      </p>
       <CodeEditorStyled wrap="off" onKeyDown={onKeyDownHandler}></CodeEditorStyled>
     </ProjectShellStyle>
   )
@@ -286,8 +316,7 @@ const Project = () => {
         <ProjectShell
       >
 
-        </ProjectShell
-      >
+        </ProjectShell>
        {/* </C2> */}
         
         {/* <> */}

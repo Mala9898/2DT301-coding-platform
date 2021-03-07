@@ -4,10 +4,18 @@ import json
 import subprocess
 import sys
 import os
+from flask_cors import CORS
+import time
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'vnkdjnfjknfl1232#'
-socketio = SocketIO(app)
+app.config['SECRET_KEY'] = 'meme'
+CORS(app)
+socketio = SocketIO(app, cors_allowed_origins="*")
+
+@app.route('/emit')
+def emit():
+    socketio.emit('reee', json.dumps({"data": f"{time.strftime('%I:%M:%S %p', time.localtime())}", "error": "none"}), broadcast=True)
+    return "emitted"
 
 @app.route('/')
 def sessions():
@@ -28,6 +36,7 @@ def handle_my_custom_event(json_data, methods=['GET', 'POST']):
     list_files = subprocess.run(command, capture_output=True, text=True, shell=True)
     # print("The exit code was: %d" % list_files.returncode)
     result = list_files.stdout
+    print(f"ran command. stdout: {list_files.stdout} \n stderr:{list_files.stderr}")
     socketio.emit('my response', result, callback=messageReceived)
 
     # actual_shell = json.loads(json_data)
