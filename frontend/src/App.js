@@ -3,15 +3,15 @@ import './App.css';
 import React, { useState, useEffect, useRef } from 'react'
 import {BrowserRouter as Router, Switch, Route, Link} from "react-router-dom"
 import styled from 'styled-components'
+// import io from 'socket.io-client';
+import {initiateSocket, disconnectSocket, socket} from "./service/socket"
 
 // import {socket} from "../src/service/socket"
 // import socketIOClient from "socket.io-client"
 // import io from 'socket.io-client'
 // const SOCKET_SERVER_URL = "http://localhost:5000";
-import { initiateSocket, disconnectSocket,
-  subscribeToChat, sendMessage } from './service/socket';
-
-
+// import { initiateSocket, disconnectSocket,
+  // subscribeToChat, sendMessage } from './service/socket';
 
 // import TextEditor from './components/TextEditor'
 // import { useSlate } from 'slate-react';
@@ -218,22 +218,30 @@ const ProjectCodeEditorView = styled.div`
 `
 
 const ProjectShell = () => {
-  // let ss = io(SOCKET_SERVER_URL)
-
-  const [response, setResponse] = useState("")
-
+  // const [response, setResponse] = useState("")
+  const [shellText, setShellText] = useState("")
   useEffect(() => {
-    initiateSocket(111)
 
-
-
-    // ss.on("my response", data => {
-    //   setResponse(data)
-    //   console.log("From API: " + data)
-    // })
+    // let socket = io('http://localhost:5000', { secure: true, reconnection: true, rejectUnauthorized: false });
+    // socket = io('http://localhost:5000', { secure: true,    reconnection: true, rejectUnauthorized: false });
+    
+    console.log(`Connecting socket...`);
+    initiateSocket(300)
+    console.log(`post Connecting socket...`);
+    socket.on("connect_error", (err) => {
+      console.log(`connect_error due to ${err.message}`);
+    });
+    socket.on("reee", (data) => {
+      const resp = JSON.parse(data);
+      // setResponse(resp.data)
+      console.log(` prev: ${shellText} to add: ${resp.data}`)
+      setShellText(shellText => shellText+"\n"+resp.data)
+    });
 
     return () => {
       disconnectSocket();
+        // if(socket) 
+        //   socket.disconnect()
     }
   }, [])
   const onKeyDownHandler = (e) => {
@@ -243,23 +251,41 @@ const ProjectShell = () => {
         e.preventDefault();
         break;
       case 'Enter':
+        e.preventDefault()
+        const toExecute = shellText.split('\n').pop()
+        socket.emit('run shell', {command: toExecute});
+        // document.execCommand('insertText', false, "\n");
         console.log("enter")
+      case 'u':
+        if (e.ctrlKey) {
+          
+          setShellText(shellText => {
+            let shellTextLines = shellText.split("\n")
+            shellTextLines.pop()  
+            return shellTextLines.join("\n").concat("\n")
+          })
+        }
+        break;
+      case 'l':
+        if (e.ctrlKey) {
+          setShellText("")
+          console.log("ctrl + l")
+        }
+        break;
       default:
         break;
     }
-    // if(e.key == 'Tab') {
-    //   // document.execCommand('insertText', false, "    ");
-    //   e.preventDefault();
-    //   console.log("tab")
-    //   return false;
-    // }
+  }
+  const onShellChange = (event) => {
+    setShellText(event.target.value)
+    // console.log(`onShellChange: ${shellText}`)
   }
   return (
     <ProjectShellStyle>
-      <p>
+      {/* <p>
         response: {response}
-      </p>
-      <CodeEditorStyled wrap="off" onKeyDown={onKeyDownHandler}></CodeEditorStyled>
+      </p> */}
+      <CodeEditorStyled value={shellText} onChange={onShellChange} wrap="off" onKeyDown={onKeyDownHandler}></CodeEditorStyled>
     </ProjectShellStyle>
   )
 }
@@ -282,7 +308,6 @@ const CodeEditorStyled = styled.textarea`
 
 const CodeEditor = () => {
 
-
   return (
     <>
       <textarea>
@@ -302,7 +327,6 @@ const Project = () => {
     }
   }
   
-
   return (
     <>
     <C1>

@@ -37,7 +37,9 @@ def handle_my_custom_event(json_data, methods=['GET', 'POST']):
     # print("The exit code was: %d" % list_files.returncode)
     result = list_files.stdout
     print(f"ran command. stdout: {list_files.stdout} \n stderr:{list_files.stderr}")
-    socketio.emit('my response', result, callback=messageReceived)
+    # socketio.emit('my response', result, callback=messageReceived)
+
+    socketio.emit('reee', json.dumps({"data": result, "error": "none"}), broadcast=True)
 
     # actual_shell = json.loads(json_data)
     # print('to run in shell' +str(json_data))

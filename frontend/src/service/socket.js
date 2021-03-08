@@ -1,5 +1,5 @@
 import io from 'socket.io-client';
-let socket;
+export let socket;
 
 export const initiateSocket = (room) => {
   socket = io('http://localhost:5000', { secure: true, reconnection: true, rejectUnauthorized: false });
