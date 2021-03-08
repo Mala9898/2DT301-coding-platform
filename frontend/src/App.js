@@ -208,13 +208,35 @@ const ProjectFiles = () => {
 }
 
 const ProjectCodeEditorView = styled.div`
-  display:grid;
+  display:flex;
+  flex-direction: column;
   /* width: 100%; */
-  height: 100%;
-  background-color: white;
+  /* height: 100%; */
+  background-color: red;
+  align-items: stretch;
   /* border: 1px solid black; */
   /* margin: 5px; */
   /* display: block; */
+`
+const CodeManager = styled.div`
+
+`
+const ProjectRunButton = styled.button`
+  display: flex;
+`
+const CodeEditorStyled = styled.textarea`
+  display: flex;
+  flex: 1 1 auto;
+  border: 0px;
+  resize: none;
+  box-shadow: none;
+  outline: none;
+  /* min-height: 100%; */
+  /* height: auto; */
+  min-height: auto;
+  box-sizing: border-box;
+  /* background-color: green; */
+  /* wrap: off; */
 `
 
 const ProjectShell = () => {
@@ -298,13 +320,7 @@ const ProjectShellStyle = styled.div`
   /* margin: 5px; */
   /* display: block; */
 `
-const CodeEditorStyled = styled.textarea`
-  border: 0px;
-  resize: none;
-  box-shadow: none;
-  outline: none;
-  /* wrap: off; */
-`
+
 
 const CodeEditor = () => {
 
@@ -335,6 +351,7 @@ const Project = () => {
 
         </ProjectFiles>
         <ProjectCodeEditorView>
+          <ProjectRunButton>run</ProjectRunButton>
           <CodeEditorStyled wrap="off" onKeyDown={onKeyDownHandler}></CodeEditorStyled>
         </ProjectCodeEditorView>
         <ProjectShell
