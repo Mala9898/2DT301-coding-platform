@@ -219,10 +219,42 @@ const ProjectCodeEditorView = styled.div`
   /* display: block; */
 `
 const CodeManager = styled.div`
-
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px;
+  background-color: ${lightGray};
+  /* margin: 0 0 5px 0; */
 `
 const ProjectRunButton = styled.button`
   display: flex;
+  border-radius: 4px;
+  border: 0;
+  text-decoration: none;
+  padding: 10px 30px;
+  /* margin: 1rem 1rem; */
+  outline: none;
+  background-color: ${props => props.default ? "white": "#8FD16E"};
+  /* color: white; */
+  /* background-color: white; */
+  /* box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; */
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+
+
+  transition: all 0.2s ease-in-out;
+  :hover {
+    
+    /* background: #fff; */
+    
+    /* color: #010606; */
+    /* color: #ffffff; */
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;
+  }
+  :active {
+    transition: all 0s ease-in-out;
+    background-color: ${props => props.default ? "#E5E5E5": "#5BA237"};
+  }
+
 `
 const CodeEditorStyled = styled.textarea`
   display: flex;
@@ -320,10 +352,7 @@ const ProjectShellStyle = styled.div`
   /* margin: 5px; */
   /* display: block; */
 `
-
-
 const CodeEditor = () => {
-
   return (
     <>
       <textarea>
@@ -332,7 +361,10 @@ const CodeEditor = () => {
     </>
   )
 }
-
+const ParagraphSimple = styled.p`
+  margin: 0;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;
+`
 const Project = () => {
 
   const onKeyDownHandler = (e) => {
@@ -351,7 +383,11 @@ const Project = () => {
 
         </ProjectFiles>
         <ProjectCodeEditorView>
-          <ProjectRunButton>run</ProjectRunButton>
+          <CodeManager>
+            <ProjectRunButton default>testa.py</ProjectRunButton>
+            <ProjectRunButton>run</ProjectRunButton>
+          </CodeManager>
+          
           <CodeEditorStyled wrap="off" onKeyDown={onKeyDownHandler}></CodeEditorStyled>
         </ProjectCodeEditorView>
         <ProjectShell
