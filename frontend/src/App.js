@@ -367,6 +367,16 @@ const ParagraphSimple = styled.p`
 `
 const Project = () => {
 
+  const [code, setCode] = useState(`import time\n\nprint(f"{time.time()}")`)
+
+  useEffect(() => {
+    socket.on('code output', (data) => {
+      console.log(`stdout: ${JSON.parse(data)['stdout']}`)
+    })
+    // return () => {
+    //   cleanup
+    // }
+  }, [])
   const onKeyDownHandler = (e) => {
     if(e.key == 'Tab' && !e.shiftKey) {
       document.execCommand('insertText', false, "    ");
@@ -374,34 +384,38 @@ const Project = () => {
       return false;
     }
   }
+
+  const runCode = (event) => {
+    const submission = {
+      code: code
+    }
+    socket.emit('run code', submission);
+    // console.log(event)
+  }
+  const onCodeChange = (event) => {
+    setCode(event.target.value)
+  }
   
   return (
     <>
-    <C1>
-       {/* <C2> */}
+      <C1>
         <ProjectFiles>
 
         </ProjectFiles>
+
         <ProjectCodeEditorView>
           <CodeManager>
             <ProjectRunButton default>testa.py</ProjectRunButton>
-            <ProjectRunButton>run</ProjectRunButton>
+            <ProjectRunButton onClick={runCode}>run</ProjectRunButton>
           </CodeManager>
           
-          <CodeEditorStyled wrap="off" onKeyDown={onKeyDownHandler}></CodeEditorStyled>
+        <CodeEditorStyled value={code} onChange={onCodeChange} wrap="off" onKeyDown={onKeyDownHandler}></CodeEditorStyled>
         </ProjectCodeEditorView>
-        <ProjectShell
-      >
+
+        <ProjectShell>
 
         </ProjectShell>
-       {/* </C2> */}
-        
-        {/* <> */}
-      {/* <h1>Project {meme}</h1> */}
-      {/* <E1></E1> */}
-     
-      {/* <h2>End</h2> */}
-    {/* </> */}
+       
       </C1>
     </>
      

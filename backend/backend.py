@@ -47,6 +47,20 @@ def handle_my_custom_event(json_data, methods=['GET', 'POST']):
     # print(actual_shell.command)
     # socketio.emit('my response', json, callback=messageReceived)
 
+@socketio.on('run code')
+def handle_run_code(data, methods=['GET', 'POST']):
+    print(f"run code: {data['code']}")
+
+    try:
+        result = subprocess.run([sys.executable, "-c", data['code']],
+                            capture_output=True, 
+                            timeout=1)
+
+        result_std_out = result.stdout.decode("utf8")
+        print(f"stdout: {result_std_out}")
+        socketio.emit('code output', json.dumps({"stdout": result_std_out, "error": "none"}), broadcast=True)
+    except:
+        print("sum ting went wong")
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)
