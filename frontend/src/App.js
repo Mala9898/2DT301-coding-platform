@@ -181,8 +181,8 @@ background-color: white;
 `
 const tempFiles = [
   {file_id: 1, filename: "test.py"},
-  {file_id: 2, filename: "test_2.py"},
-  {file_id: 3, filename: "shrek.png"},
+  // {file_id: 2, filename: "test_2.py"},
+  // {file_id: 3, filename: "shrek.png"},
 ]
 const ULFileListStyle = styled.ul`
   list-style: none;
@@ -271,13 +271,16 @@ const CodeEditorStyled = styled.textarea`
   /* wrap: off; */
 `
 
-const ProjectShell = () => {
+const ProjectShell = ({stdout}) => {
   // const [response, setResponse] = useState("")
   const [shellText, setShellText] = useState("")
   useEffect(() => {
-
-    // let socket = io('http://localhost:5000', { secure: true, reconnection: true, rejectUnauthorized: false });
-    // socket = io('http://localhost:5000', { secure: true,    reconnection: true, rejectUnauthorized: false });
+    setShellText(stdout)
+    // return () => {
+    //   cleanup
+    // }
+  }, [stdout])
+  useEffect(() => {
     
     console.log(`Connecting socket...`);
     initiateSocket(300)
@@ -368,10 +371,21 @@ const ParagraphSimple = styled.p`
 const Project = () => {
 
   const [code, setCode] = useState(`import time\n\nprint(f"{time.time()}")`)
+  const [stdout, setStdout] = useState("")
 
   useEffect(() => {
     socket.on('code output', (data) => {
-      console.log(`stdout: ${JSON.parse(data)['stdout']}`)
+      console.log(data)
+      if (JSON.parse(data)['error'] === "none") {
+        const stdd = JSON.parse(data)['stdout']
+        console.log(`stdout: ${stdd}`)
+        setStdout(stdd)
+      } else if (JSON.parse(data)['error'] === "yes") {
+        const stdd = JSON.parse(data)['stderr']
+        console.log(`stderr: ${stdd}`)
+        setStdout(stdd)
+      }
+      
     })
     // return () => {
     //   cleanup
@@ -412,7 +426,7 @@ const Project = () => {
         <CodeEditorStyled value={code} onChange={onCodeChange} wrap="off" onKeyDown={onKeyDownHandler}></CodeEditorStyled>
         </ProjectCodeEditorView>
 
-        <ProjectShell>
+        <ProjectShell stdout={stdout}>
 
         </ProjectShell>
        

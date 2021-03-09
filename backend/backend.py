@@ -56,9 +56,16 @@ def handle_run_code(data, methods=['GET', 'POST']):
                             capture_output=True, 
                             timeout=1)
 
-        result_std_out = result.stdout.decode("utf8")
-        print(f"stdout: {result_std_out}")
-        socketio.emit('code output', json.dumps({"stdout": result_std_out, "error": "none"}), broadcast=True)
+        
+        if(result.stderr):
+            result_stderr = result.stderr.decode("utf8")
+            print(f"stderr: {result_stderr}")
+            
+            socketio.emit('code output', json.dumps({"stdout": "", "error": "yes", "stderr": result_stderr}), broadcast=True)
+        else:
+            result_std_out = result.stdout.decode("utf8")
+            print(f"stdout: {result_std_out}")
+            socketio.emit('code output', json.dumps({"stdout": result_std_out, "error": "none", "stderr": ""}), broadcast=True)
     except:
         print("sum ting went wong")
 
