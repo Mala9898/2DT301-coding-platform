@@ -13,6 +13,7 @@ fn main() {
         println!("{}", x);
     }
     println!("{}", x);
+    println!("yau: {:?}", x);
 
     let _x = "heluu";
     let x = {"heluuu"};
