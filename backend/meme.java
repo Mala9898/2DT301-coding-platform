@@ -1,7 +1,7 @@
-#include <stdio.h>
-int main() {
-   // printf() displays the string inside quotation
-   printf("Hello, World!");
-   return 0;
+//import java.util.Scanner;
+class Main {
+	public static void main(String[] args) {
+		//Scanner sc = new Scanner(System.in);
+		System.out.println("Hello from java!");
+	}
 }
-

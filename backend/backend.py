@@ -4,7 +4,7 @@ import json
 import subprocess
 import sys
 import os
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 import time
 import base64
 
@@ -20,6 +20,7 @@ def emit():
     socketio.emit('reee', json.dumps({"data": f"{time.strftime('%I:%M:%S %p', time.localtime())}", "error": "none"}), broadcast=True)
     return "emitted"
 
+@cross_origin()
 @app.route('/')
 def sessions():
     return render_template('session.html')
@@ -201,6 +202,10 @@ def handle_request_files(data, methods=['GET, POST']):
     }), broadcast=True)
 
 
+# upload_file
+@socketio.on('upload_file')
+def handle_upload_file(data, methods=['GET, POST']):
+    print(f"uploaded file: {data['file']}")
 
 
 if __name__ == '__main__':
