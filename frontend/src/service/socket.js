@@ -5,7 +5,7 @@ export const initiateSocket = (room) => {
   socket = io('http://localhost:5000', { secure: true, reconnection: true, rejectUnauthorized: false });
   console.log(`Connecting socket...`);
   if (socket && room) {
-      socket.emit('join', room);
+      socket.emit('user_join_request', room);
       console.log("socket && room ")
   }
   socket.on("connect_error", (err) => {

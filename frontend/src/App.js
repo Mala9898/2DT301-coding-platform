@@ -5,6 +5,11 @@ import {BrowserRouter as Router, Switch, Route, Link} from "react-router-dom"
 import styled from 'styled-components'
 // import io from 'socket.io-client';
 import {initiateSocket, disconnectSocket, socket} from "./service/socket"
+// import 
+
+import ProjectShell from "./components/Shell"
+import {CodeEditorStyle, ProjectCodeEditorView, CodeManager, ProjectRunButton} from "./components/Code"
+import {ProjectFiles} from "./components/Sidebar"
 
 // import {socket} from "../src/service/socket"
 // import socketIOClient from "socket.io-client"
@@ -16,7 +21,9 @@ import {initiateSocket, disconnectSocket, socket} from "./service/socket"
 // import TextEditor from './components/TextEditor'
 // import { useSlate } from 'slate-react';
 
-const lightGray = "#f3f3f3";
+import {lightGray} from "./styles/Constants"
+
+const clientId = Math.floor(Math.random() * 0xFFFFFFFFFFFF);
 
 const StyledNavLink = styled(Link)`
   color: #363636;
@@ -168,193 +175,8 @@ const C1 = styled.div`
   /* margin: 10px; */
   /* gap: 10px 10px; */
 `
-const ProjectFilesStyle = styled.div`
-display:grid;
-/* grid-column: 1 / 1;  */
-/* width: 100%; */
-height: 100%;
-background-color: white;
-/* border: 1px solid black; */
-/* border-radius: 5px; */
-/* margin: 5px; */
-/* display: block; */
-`
-const tempFiles = [
-  {file_id: 1, filename: "test.py"},
-  // {file_id: 2, filename: "test_2.py"},
-  // {file_id: 3, filename: "shrek.png"},
-]
-const ULFileListStyle = styled.ul`
-  list-style: none;
-  text-align: left;
-  /* color: red; */
-  padding-left: 0px;
-  margin: 2px 10px;
-`
-const ProjectFiles = () => {
-  const [files, setFiles] = useState(tempFiles)
-  useEffect(() => {
-    // TODO read from server
-  }, [])
-  return (
-    <ProjectFilesStyle>
-      <ULFileListStyle>
-        {files.map( file => 
-          <li key={file.file_id} onClick={() => {alert("you pressed: "+file.filename)}}>{file.filename}</li>  
-        )}
-      </ULFileListStyle>
-    </ProjectFilesStyle>
-  )
-}
-
-const ProjectCodeEditorView = styled.div`
-  display:flex;
-  flex-direction: column;
-  /* width: 100%; */
-  /* height: 100%; */
-  background-color: red;
-  align-items: stretch;
-  /* border: 1px solid black; */
-  /* margin: 5px; */
-  /* display: block; */
-`
-const CodeManager = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 2px;
-  background-color: ${lightGray};
-  /* margin: 0 0 5px 0; */
-`
-const ProjectRunButton = styled.button`
-  display: flex;
-  border-radius: 4px;
-  border: 0;
-  text-decoration: none;
-  padding: 10px 30px;
-  /* margin: 1rem 1rem; */
-  outline: none;
-  background-color: ${props => props.default ? "white": "#8FD16E"};
-  /* color: white; */
-  /* background-color: white; */
-  /* box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; */
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
 
 
-  transition: all 0.2s ease-in-out;
-  :hover {
-    
-    /* background: #fff; */
-    
-    /* color: #010606; */
-    /* color: #ffffff; */
-    box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;
-  }
-  :active {
-    transition: all 0s ease-in-out;
-    background-color: ${props => props.default ? "#E5E5E5": "#5BA237"};
-  }
-
-`
-const CodeEditorStyled = styled.textarea`
-  display: flex;
-  flex: 1 1 auto;
-  border: 0px;
-  resize: none;
-  box-shadow: none;
-  outline: none;
-  /* min-height: 100%; */
-  /* height: auto; */
-  min-height: auto;
-  box-sizing: border-box;
-  /* background-color: green; */
-  /* wrap: off; */
-`
-
-const ProjectShell = ({stdout}) => {
-  // const [response, setResponse] = useState("")
-  const [shellText, setShellText] = useState("")
-  useEffect(() => {
-    setShellText(stdout)
-    // return () => {
-    //   cleanup
-    // }
-  }, [stdout])
-  useEffect(() => {
-    
-    console.log(`Connecting socket...`);
-    initiateSocket(300)
-    console.log(`post Connecting socket...`);
-    socket.on("connect_error", (err) => {
-      console.log(`connect_error due to ${err.message}`);
-    });
-    socket.on("reee", (data) => {
-      const resp = JSON.parse(data);
-      // setResponse(resp.data)
-      console.log(` prev: ${shellText} to add: ${resp.data}`)
-      setShellText(shellText => shellText+"\n"+resp.data)
-    });
-
-    return () => {
-      disconnectSocket();
-        // if(socket) 
-        //   socket.disconnect()
-    }
-  }, [])
-  const onKeyDownHandler = (e) => {
-    switch (e.key) {
-      case 'Tab':
-        console.log("tab")
-        e.preventDefault();
-        break;
-      case 'Enter':
-        e.preventDefault()
-        const toExecute = shellText.split('\n').pop()
-        socket.emit('run shell', {command: toExecute});
-        // document.execCommand('insertText', false, "\n");
-        console.log("enter")
-      case 'u':
-        if (e.ctrlKey) {
-          
-          setShellText(shellText => {
-            let shellTextLines = shellText.split("\n")
-            shellTextLines.pop()  
-            return shellTextLines.join("\n").concat("\n")
-          })
-        }
-        break;
-      case 'l':
-        if (e.ctrlKey) {
-          setShellText("")
-          console.log("ctrl + l")
-        }
-        break;
-      default:
-        break;
-    }
-  }
-  const onShellChange = (event) => {
-    setShellText(event.target.value)
-    // console.log(`onShellChange: ${shellText}`)
-  }
-  return (
-    <ProjectShellStyle>
-      {/* <p>
-        response: {response}
-      </p> */}
-      <CodeEditorStyled value={shellText} onChange={onShellChange} wrap="off" onKeyDown={onKeyDownHandler}></CodeEditorStyled>
-    </ProjectShellStyle>
-  )
-}
-const ProjectShellStyle = styled.div`
-  display:grid;
-  /* width: 100%; */
-  height: 100%;
-  background-color: white;
-  /* border: 1px solid black; */
-  /* margin: 5px; */
-  /* display: block; */
-`
 const CodeEditor = () => {
   return (
     <>
@@ -370,10 +192,21 @@ const ParagraphSimple = styled.p`
 `
 const Project = () => {
 
+  const [files, setFiles] = useState([])
+  const [filename, setFilename] = useState("program")
+  const [fileType, setFileType] = useState("c")
   const [code, setCode] = useState(`import time\n\nprint(f"{time.time()}")`)
   const [stdout, setStdout] = useState("")
 
   useEffect(() => {
+      if (localStorage.getItem('client_id') !== null) {
+        console.log(`client id exists: ${localStorage.getItem('client_id')}`)
+      } else {
+        const clientId = Math.floor(Math.random() * 0xFFFFFFFFFFFF)
+        console.log(`client id not found. setting client_id to ${clientId}`)
+        localStorage.setItem('client_id', clientId)
+      }
+
     socket.on('code output', (data) => {
       console.log(data)
       if (JSON.parse(data)['error'] === "none") {
@@ -385,8 +218,40 @@ const Project = () => {
         console.log(`stderr: ${stdd}`)
         setStdout(stdd)
       }
-      
     })
+    socket.on("user_join", data => {
+      const parsed = JSON.parse(data)
+      if (parsed['status'] === "OK") {
+        console.log("user_join status OK")
+        console.log(`code: ${parsed['code']}`)
+        setCode(parsed['code'])
+      } else {
+        console.log(`user_join ???: ${data}`)
+      }
+    })
+    socket.on("set_code", data => {
+      console.log(`set_code: ${data}`)
+    })
+    socket.on("code_updated_notification", data => {
+      const parsed = JSON.parse(data)
+      console.log("code updated");
+      if (parsed['clientId'] !== clientId) {
+        setCode(parsed['code'])
+      } 
+    })
+    socket.on("request_files_result", data => {
+      console.log("requestd files are here!")
+      const parsed = JSON.parse(data)
+      console.log(parsed['files'])
+      setFiles(parsed['files'])
+    })
+    socket.on("request_file_result", data => {
+      console.log("requestd file are here!")
+      const parsed = JSON.parse(data)
+      console.log(parsed['file'])
+      setCode(parsed['file'])
+    })
+    socket.emit('request_files', {})
     // return () => {
     //   cleanup
     // }
@@ -399,31 +264,46 @@ const Project = () => {
     }
   }
 
+  
+  const onCodeChange = (event) => {
+    setCode(event.target.value)
+    socket.emit('set_code', {clientId: clientId, code: event.target.value})
+  }
   const runCode = (event) => {
     const submission = {
-      code: code
+      code: code,
+      fileType: fileType,
+      filename: filename,
     }
     socket.emit('run code', submission);
     // console.log(event)
   }
-  const onCodeChange = (event) => {
-    setCode(event.target.value)
-  }
+  
+
   
   return (
     <>
       <C1>
-        <ProjectFiles>
+        <ProjectFiles 
+          files={files} 
+          socket={socket} 
+          setFilename={setFilename}
+          setFileType={setFileType}  
+        >
 
         </ProjectFiles>
 
-        <ProjectCodeEditorView>
-          <CodeManager>
-            <ProjectRunButton default>testa.py</ProjectRunButton>
-            <ProjectRunButton onClick={runCode}>run</ProjectRunButton>
-          </CodeManager>
+        <ProjectCodeEditorView> 
+
+            {/* run code, tabs etc */}
+            <CodeManager>
+                <ProjectRunButton default>{filename}.{fileType}</ProjectRunButton>
+                {(fileType === "py" || fileType === "java" || fileType === "c") && <ProjectRunButton onClick={runCode}>run</ProjectRunButton>}
+                
+            </CodeManager>
           
-        <CodeEditorStyled value={code} onChange={onCodeChange} wrap="off" onKeyDown={onKeyDownHandler}></CodeEditorStyled>
+            {/* actual code view */}
+            <CodeEditorStyle value={code} onChange={onCodeChange} wrap="off"   onKeyDown={onKeyDownHandler}></CodeEditorStyle>
         </ProjectCodeEditorView>
 
         <ProjectShell stdout={stdout}>
