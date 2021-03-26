@@ -1,9 +1,22 @@
 import styled from 'styled-components'
 import React, { useState, useEffect } from 'react'
 
-
 import {lightGray} from "../styles/Constants"
 
+// const CodeEditorStyle = styled.textarea`
+//   display: flex;
+//   flex: 1 1 auto;
+//   border: 0px;
+//   resize: none;
+//   box-shadow: none;
+//   outline: none;
+//   /* min-height: 100%; */
+//   /* height: auto; */
+//   min-height: auto;
+//   box-sizing: border-box;
+//   /* background-color: green; */
+//   /* wrap: off; */
+// `
 const CodeEditorStyle = styled.textarea`
   display: flex;
   flex: 1 1 auto;

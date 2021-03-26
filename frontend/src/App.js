@@ -12,6 +12,7 @@ import ProjectShell from "./components/Shell"
 import {CodeEditorStyle, ProjectCodeEditorView, CodeManager, ProjectRunButton} from "./components/Code"
 import {ProjectFiles} from "./components/Sidebar"
 
+
 // import {socket} from "../src/service/socket"
 // import socketIOClient from "socket.io-client"
 // import io from 'socket.io-client'
@@ -21,6 +22,8 @@ import {ProjectFiles} from "./components/Sidebar"
 
 // import TextEditor from './components/TextEditor'
 // import { useSlate } from 'slate-react';
+
+import Highlight, { defaultProps } from "prism-react-renderer";
 
 import {lightGray} from "./styles/Constants"
 
@@ -273,6 +276,7 @@ const C1 = styled.div`
 
 
 const CodeEditor = () => {
+  
   return (
     <>
       <textarea>
@@ -416,6 +420,7 @@ const Project = () => {
           
             {/* actual code view */}
             <CodeEditorStyle value={code} onChange={onCodeChange} wrap="off"   onKeyDown={onKeyDownHandler}></CodeEditorStyle>
+
         </ProjectCodeEditorView>
 
         <ProjectShell stdout={stdout}>

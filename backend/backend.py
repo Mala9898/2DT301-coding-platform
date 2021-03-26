@@ -237,8 +237,13 @@ def handle_upload_file(data, methods=['GET, POST']):
 @socketio.on('run tests')
 def handle_run_tests(dataTest, methods=['GET, POST']):
     testOutput = ""
+
+
     with open('tests') as f:
         data = json.load(f)
+
+        if not os.path.exists("tests"):
+            socketio.emit('test output', json.dumps({"result": "missing tests file..."}), broadcast=True)
         for testFile in data:
             f = open(testFile, "r")
             codeToRun = f.read()
