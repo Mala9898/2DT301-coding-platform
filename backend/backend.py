@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, url_for, redirect, session
 from flask_socketio import SocketIO
 import json
 import subprocess
@@ -7,18 +7,43 @@ import os
 from flask_cors import CORS, cross_origin
 import time
 import base64
+import pymongo
+import bcrypt
+import pymongo
+import random
+import string
+from pymongo import MongoClient
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'meme'
 CORS(app)
 socketio = SocketIO(app, cors_allowed_origins="*")
 
+# simple user authentication 
+# credit: https://medium.com/codex/simple-registration-login-system-with-flask-mongodb-and-bootstrap-8872b16ef915
+client = MongoClient(host="142.93.109.43", port=27017)
+db = client.get_database('total_records')
+records = db.register
+
 project_code = base64.b64decode('aW1wb3J0IHRpbWUNCg0KcHJpbnQoZiJ7dGltZS50aW1lKCl9IikNCnByaW50KCJoZWxsbyB3b3JsZCEiKQ==').decode("utf8")
 
-@app.route('/emit')
-def emit():
-    socketio.emit('reee', json.dumps({"data": f"{time.strftime('%I:%M:%S %p', time.localtime())}", "error": "none"}), broadcast=True)
-    return "emitted"
+@app.route('/api/create_room')
+def api_create_room():
+    room_key = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
+
+    print(f"creating new room w/ key={room_key}")
+    return f"creating room: {room_key}"
+
+
+@app.route('/api/join_room/<room_key>')
+def api_join_room(room_key):
+    
+
+    print(f"joining room w/ key={room_key}")
+    return f"joining room: {room_key}"
+
+
 
 @cross_origin()
 @app.route('/')

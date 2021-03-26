@@ -1,3 +1,4 @@
+import axios from 'axios'
 import logo from './logo.svg';
 import './App.css';
 import React, { useState, useEffect, useRef } from 'react'
@@ -97,7 +98,7 @@ const App = () => {
             <UlList>
               <NavMenu>
                 <li>
-                  <StyledNavLink to="/">Coding Platform</StyledNavLink>
+                  <StyledNavLink to="/">Coding Hub</StyledNavLink>
                 </li>
               </NavMenu>
               <RunCommandInput placeholder="Run commands"></RunCommandInput>
@@ -145,13 +146,107 @@ const App = () => {
 }
 const About = () => <p>About</p>
 const Users = () => <p>Users</p>
-const Home = () => (
-  <>
-    <p>hell</p>
-    {/* <TextEditor/> */}
-    <p>end</p>
-  </>
+
+const HomeDiv = styled.div`
+  display: flex;
+  margin: 0 100px;
+  flex-direction: column;
+
+`
+const HomeDivActions = styled.div`
+  display: flex;
+  flex-direction: row;
+  /* align-items: flex-start; */
+  /* align-items: stretch; */
+  justify-content: space-between;
+  align-items: flex-start;
+  /* align-content: stretch; */
+  flex-grow: 0;
+`
+const HomeDivActionsBox = styled.div`
+  padding: 1rem;
+  background-color: white;
+  border-radius: 5px;
+  width: 300px;
+  box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
+  display: flex;
+  justify-content: left;
+  flex-direction: column;
+  flex-grow: 0;
+`
+const HomePageInput = styled.input`
+  height:40px;
+  /* flex-grow: 1; */
+  text-indent: 10px;
+  font-size: 16px;
+  outline: 0 none;
+  border: 0 none;
+  border-radius: 6px;
+  background: ${lightGray};
+`
+const HomePageButton = styled.button `
+  /* color: palevioletred; */
+  font-size: 1em;
+  /* margin: 20px 0; */
+  padding: 0.8em 1em;
+  /* border: 2px solid palevioletred; */
+  border-radius: 3px;
+  display: block;
+`
+
+
+const Home = () => {
+  
+  const [roomNumber, setRoomNumber] = useState("")
+  const createRoom = () => {
+    console.log("creating room...")
+    const promise = axios.get('http://www.localhost:5000/api/create_room')
+      .then( (response) => {
+        console.log(response.data)
+        
+      })
+      .catch((fail) => {
+        console.log("failed to create room")
+      })
+  }
+
+  const joinRoom = () => {
+    console.log("joining room...")
+    const promise = axios.get(`http://www.localhost:5000/api/join_room/${roomNumber}`)
+      .then( (response) => {
+        console.log(response.data)
+      })
+      .catch((fail) => {
+        console.log("failed to join room")
+      })
+  }
+  const roomNumberInputHandler = (e) => {
+    setRoomNumber(e.target.value);
+  }
+  return (
+    <HomeDiv>
+      <h1 style={{textAlign: 'left'}}>Welcome to Coding Hub.</h1>
+      <HomeDivActions>
+  
+        <HomeDivActionsBox>
+        <h3 style={{textAlign:'left', margin: '10px 0'}}>Join an existing workspace</h3>
+          <HomePageInput value={roomNumber} onChange={roomNumberInputHandler}></HomePageInput>
+          <br></br>
+          <HomePageButton onClick={joinRoom}>Join room</HomePageButton>
+        </HomeDivActionsBox>
+  
+        <HomeDivActionsBox>
+          <h3 style={{textAlign:'left', margin: '10px 0'}}>Create a new workspace</h3>
+          <HomePageButton onClick={createRoom}>Create room</HomePageButton>
+        </HomeDivActionsBox>
+  
+      </HomeDivActions>
+  
+    </HomeDiv>
+    
   )
+}
+
 // const C1 = styled.div`
 //   display: flex;
 //   flex-direction: column;
