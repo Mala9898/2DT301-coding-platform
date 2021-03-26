@@ -1,0 +1,19 @@
+{
+  "squaring.py": {
+    "title": "squaring",
+    "tests": [
+      {
+        "input": "2",
+        "answer": "4"
+      },
+      {
+        "input": "3",
+        "answer": "9"
+      },
+      {
+        "input": "4",
+        "answer": "16"
+      }
+    ]
+  }
+}

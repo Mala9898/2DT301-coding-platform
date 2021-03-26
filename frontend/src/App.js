@@ -314,6 +314,10 @@ const Project = () => {
         setStdout(stdd)
       }
     })
+    socket.on('test output', (data) => {
+      setStdout(JSON.parse(data).result)
+    })
+
     socket.on("user_join", data => {
       const parsed = JSON.parse(data)
       if (parsed['status'] === "OK") {
@@ -376,6 +380,9 @@ const Project = () => {
     socket.emit('run code', submission);
     // console.log(event)
   }
+  const runTests = (event) => {
+    socket.emit('run tests', {});
+  }
   
 
   
@@ -396,7 +403,13 @@ const Project = () => {
 
             {/* run code, tabs etc */}
             <CodeManager>
+                <div style={{display: "flex", flexDirection: "row"}}>
                 <ProjectRunButton default>{filename}.{fileType}</ProjectRunButton>
+                <ProjectRunButton default onClick={runTests}>Run Tests</ProjectRunButton>
+                </div>
+                
+
+
                 {(fileType === "py" || fileType === "java" || fileType === "c") && <ProjectRunButton onClick={runCode}>run</ProjectRunButton>}
                 
             </CodeManager>

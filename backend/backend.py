@@ -234,6 +234,36 @@ def handle_upload_file(data, methods=['GET, POST']):
     print(f"uploaded file: {data['file']}")
 
 
+@socketio.on('run tests')
+def handle_run_tests(dataTest, methods=['GET, POST']):
+    testOutput = ""
+    with open('tests') as f:
+        data = json.load(f)
+        for testFile in data:
+            f = open(testFile, "r")
+            codeToRun = f.read()
+            testOutput += f"running tests on {testFile}: {data[testFile]['title']}...\n"
+            tests = data[testFile]['tests']
+            for test in tests:
+                testInput = test['input']
+                testAnswer = test['answer']
+                try:
+                    result = subprocess.run([sys.executable, "-c", codeToRun],input=bytes(testInput, 'utf8'), capture_output=True, timeout=1)
+                    
+                    result_std_out = result.stdout.decode("utf8")
+                    
+                    if result_std_out == str(testAnswer):
+                        testOutput += f"✅ Expected {testAnswer} got {result_std_out}\n"
+                    else:
+                        testOutput += f"❌ WRONG Expected {testAnswer} got {result_std_out}\n"
+
+                except Exception as e:
+                    print(f"sum ting went wong: {e}")
+    
+    print(f"ran tests... submitting: {testOutput}")
+    socketio.emit('test output', json.dumps({"result": testOutput}), broadcast=True)
+
+
 if __name__ == '__main__':
     socketio.run(app, debug=True)
 

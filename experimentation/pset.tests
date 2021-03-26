@@ -1,0 +1,32 @@
+{
+  "squaring.py": {
+    "title": "squaring",
+    "tests": [
+      {
+        "input": "2",
+        "answer": "2"
+      },
+      {
+        "input": "2",
+        "answer": "8"
+      },
+      {
+        "input": "2",
+        "answer": "16"
+      }
+    ]
+  },
+  "cubing.py": {
+    "title": "adding two numbers",
+    "tests": [
+      {
+        "input": "2 2",
+        "answer": "4"
+      },
+      {
+        "input": "100 15",
+        "answer": "115"
+      }
+    ]
+  }
+}

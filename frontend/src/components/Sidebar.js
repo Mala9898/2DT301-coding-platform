@@ -65,25 +65,48 @@ const ProjectFiles = ({files, socket, setFilename, setFileType, clientId}) => {
        console.log(await toBase64(bfile));
        socket.emit('upload_file', {file: bfile})
     }
+    const FileStyle = styled.div`
+      display: flex;
+      justify-content: space-between;
+    `
+    const TestRunButton = styled.button`
+      border-radius: 4px;
+      border: 0;
+      text-decoration: none;
+      height: 20px;
+      /* padding: 10px 30px; */
+      /* margin: 1rem 1rem; */
+      outline: none;
+      background-color: #8FD16E;
+      box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
 
+    `
     return (
       <ProjectFilesStyle>
         <input type="file" onChange={handleUpload} />
         <ULFileListStyle>
-          {files.map( (file, index) => 
-            <li key={index} onClick={() => {
-                    socket.emit('request_file', {file: file, clientId: clientId})
-                    setFileType(file.split(".")[1])
-                    setFilename(file.split(".")[0])
-                }}
-            >
-                {file}
-            </li>  
+          {files.map( (currentElement, index) => 
+
+            
+                  <li key={index} onClick={() => {
+                    socket.emit('request_file', {file: currentElement, clientId: clientId})
+                    setFileType(currentElement.split(".")[1])
+                    setFilename(currentElement.split(".")[0])
+                  }}
+                  >
+                    {currentElement}
+                  </li>  
+               
+            
           )}
         </ULFileListStyle>
       </ProjectFilesStyle>
     )
   }
 
+  //  <FileStyle>
+  //                         <p>{currentElement}</p>
+  //                         <TestRunButton>Run Tests</TestRunButton>
+  //                       </FileStyle>
 
 export { ProjectFiles}
