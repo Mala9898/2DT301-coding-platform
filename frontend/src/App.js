@@ -249,7 +249,10 @@ const Project = () => {
       console.log("requestd file are here!")
       const parsed = JSON.parse(data)
       console.log(parsed['file'])
-      setCode(parsed['file'])
+      if(parsed['clientId'] == clientId){
+        setCode(parsed['file'])
+      }
+        
     })
     socket.emit('request_files', {})
     // return () => {
@@ -289,6 +292,7 @@ const Project = () => {
           socket={socket} 
           setFilename={setFilename}
           setFileType={setFileType}  
+          clientId={clientId}
         >
 
         </ProjectFiles>

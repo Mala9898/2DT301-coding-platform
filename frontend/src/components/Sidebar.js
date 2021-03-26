@@ -31,7 +31,7 @@ const tempFiles = [
 ]
 
 
-const ProjectFiles = ({files, socket, setFilename, setFileType}) => {
+const ProjectFiles = ({files, socket, setFilename, setFileType, clientId}) => {
 
     const [file, setFile] = React.useState("");
 
@@ -72,7 +72,7 @@ const ProjectFiles = ({files, socket, setFilename, setFileType}) => {
         <ULFileListStyle>
           {files.map( (file, index) => 
             <li key={index} onClick={() => {
-                    socket.emit('request_file', {file: file})
+                    socket.emit('request_file', {file: file, clientId: clientId})
                     setFileType(file.split(".")[1])
                     setFilename(file.split(".")[0])
                 }}

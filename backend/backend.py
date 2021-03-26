@@ -198,7 +198,8 @@ def handle_request_files(data, methods=['GET, POST']):
 
     result_files = result.stdout.split("\n")
     socketio.emit('request_file_result', json.dumps({
-        "file": result.stdout
+        "file": result.stdout,
+        "clientId": data['clientId']
     }), broadcast=True)
 
 

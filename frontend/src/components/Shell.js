@@ -11,7 +11,7 @@ background-color: white;
 /* margin: 5px; */
 /* display: block; */
 `
-const CodeEditorStyled = styled.textarea`
+const ShellEditorStyle = styled.textarea`
   display: flex;
   flex: 1 1 auto;
   border: 0px;
@@ -95,7 +95,7 @@ const ProjectShell = ({stdout}) => {
         {/* <p>
           response: {response}
         </p> */}
-        <CodeEditorStyled value={shellText} onChange={onShellChange} wrap="off" onKeyDown={onKeyDownHandler}></CodeEditorStyled>
+        <ShellEditorStyle value={shellText} onChange={onShellChange} wrap="off" onKeyDown={onKeyDownHandler}></ShellEditorStyle>
       </ProjectShellStyle>
     )
   }
